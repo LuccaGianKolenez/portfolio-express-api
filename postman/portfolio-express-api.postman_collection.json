@@ -1,0 +1,95 @@
+{
+  "info": {
+    "name": "Portfolio Express API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://127.0.0.1:3001" },
+    { "key": "token", "value": "" },
+    { "key": "email", "value": "demo@example.com" },
+    { "key": "password", "value": "secret123" }
+  ],
+  "item": [
+    { "name": "Health", "request": { "method": "GET", "url": "{{baseUrl}}/api/health" } },
+    { "name": "Swagger UI", "request": { "method": "GET", "url": "{{baseUrl}}/api/docs" } },
+    {
+      "name": "Auth • Register",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/api/auth/register",
+        "body": { "mode": "raw", "raw": "{\n  \"name\": \"Demo\",\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}" }
+      }
+    },
+    {
+      "name": "Auth • Login",
+      "event": [{
+        "listen": "test",
+        "script": { "type": "text/javascript", "exec": [
+          "if (pm.response.code===200){ const data = pm.response.json(); if (data && data.access){ pm.collectionVariables.set('token', data.access); } }"
+        ] }
+      }],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/api/auth/login",
+        "body": { "mode": "raw", "raw": "{\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}" }
+      }
+    },
+    {
+      "name": "Items • List",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{baseUrl}}/api/items"
+      }
+    },
+    {
+      "name": "Items • Create",
+      "event": [{
+        "listen": "test",
+        "script": { "type": "text/javascript", "exec": [
+          "if (pm.response.code===201){ const data = pm.response.json(); pm.collectionVariables.set('itemId', data.id); }"
+        ] }
+      }],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{baseUrl}}/api/items",
+        "body": { "mode": "raw", "raw": "{\n  \"name\": \"Notebook\",\n  \"price\": 1999.9\n}" }
+      }
+    },
+    {
+      "name": "Items • Get by ID",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{baseUrl}}/api/items/{{itemId}}"
+      }
+    },
+    {
+      "name": "Items • Patch",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{baseUrl}}/api/items/{{itemId}}",
+        "body": { "mode": "raw", "raw": "{\n  \"price\": 1799.9\n}" }
+      }
+    },
+    {
+      "name": "Items • Delete",
+      "request": {
+        "method": "DELETE",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{baseUrl}}/api/items/{{itemId}}"
+      }
+    },
+    { "name": "Metrics", "request": { "method": "GET", "url": "{{baseUrl}}/api/metrics" } }
+  ]
+}
