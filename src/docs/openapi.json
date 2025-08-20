@@ -1,0 +1,19 @@
+{
+  "openapi": "3.0.3",
+  "info": { "title": "Portfolio Express API", "version": "1.0.0" },
+  "paths": {
+    "/api/health": { "get": { "summary": "Healthcheck", "responses": { "200": { "description": "OK" } } } },
+    "/api/auth/register": { "post": { "summary": "Registrar usuário", "responses": { "201": { "description": "Criado" } } } },
+    "/api/auth/login": { "post": { "summary": "Login (JWT)", "responses": { "200": { "description": "OK" } } } },
+    "/api/items": {
+      "get": { "summary": "Listar itens (auth)", "responses": { "200": { "description": "OK" } } },
+      "post": { "summary": "Criar item (auth)", "responses": { "201": { "description": "Criado" } } }
+    },
+    "/api/items/{id}": {
+      "get": { "summary": "Detalhar item (auth)", "responses": { "200": { "description": "OK" } } },
+      "patch": { "summary": "Atualizar item (auth)", "responses": { "200": { "description": "OK" } } },
+      "delete": { "summary": "Remover item (auth)", "responses": { "204": { "description": "No Content" } } }
+    },
+    "/api/metrics": { "get": { "summary": "Prometheus metrics", "responses": { "200": { "description": "OK" } } } }
+  }
+}
